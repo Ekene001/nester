@@ -4,8 +4,8 @@
 
 @layer base {
   :root {
-    --background: 0 0% 85%;
-    /* #D9D9D9 */
+    --background: 0 0% 100%;
+    /* #ffffff */
     --foreground: 240 10% 10%;
     /* Dark text */
 
@@ -118,47 +118,49 @@
 .gradient-border-active {
   position: relative;
   border-color: transparent !important;
+  overflow: visible;
 }
 
 /* Thin gradient border */
 .gradient-border-active::before {
   content: "";
   position: absolute;
-  inset: -1.5px;
+  inset: -1px;
   border-radius: inherit;
-  padding: 1.5px;
+  padding: 1px;
   background: conic-gradient(
     from var(--border-angle),
-    #6025f5, #111111, #ff5555, #111111, #facc15, #111111, #6025f5
+    #6025f5, #ff5555, #facc15, #6025f5
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
   animation: border-rotate 3s linear infinite;
+  z-index: 0;
 }
 
 /* Bright raindrop glow that circles — sits centered on the border line */
 .gradient-border-active::after {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset: -2px;
   border-radius: inherit;
-  padding: 8px;
+  padding: 4px;
   background: conic-gradient(
     from var(--border-angle),
     #6025f5 0deg,
-    #ff5555 15deg,
-    #facc15 30deg,
-    transparent 50deg,
-    transparent 330deg,
+    #ff5555 20deg,
+    #facc15 40deg,
+    transparent 60deg,
+    transparent 320deg,
     #6025f5 360deg
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
   pointer-events: none;
-  filter: blur(6px);
+  filter: blur(4px);
   opacity: 1;
   animation: border-rotate 6s linear infinite;
   z-index: 0;
