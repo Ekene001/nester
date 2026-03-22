@@ -27,13 +27,13 @@ function renderMarkdown(md: string) {
             }
             i++; // skip closing ```
             elements.push(
-                <div key={key++} className="my-4 rounded-lg overflow-hidden border border-gray-200 dark:border-white/10">
+                <div key={key++} className="my-4 rounded-lg overflow-hidden border border-border">
                     {lang && (
-                        <div className="px-4 py-1.5 text-[11px] font-mono text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-white/[0.03] border-b border-gray-200 dark:border-white/10">
+                        <div className="px-4 py-1.5 text-[11px] font-mono text-muted-foreground bg-muted border-b border-border">
                             {lang}
                         </div>
                     )}
-                    <pre className="px-4 py-3 overflow-x-auto bg-gray-50 dark:bg-[#0d0d1a] text-[13px] leading-relaxed font-mono text-gray-800 dark:text-gray-300">
+                    <pre className="px-4 py-3 overflow-x-auto bg-muted text-[13px] leading-relaxed font-mono text-foreground/80">
                         <code>{codeLines.join("\n")}</code>
                     </pre>
                 </div>
@@ -47,7 +47,7 @@ function renderMarkdown(md: string) {
             i++; continue;
         }
         if (line.startsWith("## ")) {
-            elements.push(<h2 key={key++} className="text-xl font-heading font-semibold tracking-tight mt-10 mb-3 pb-2 border-b border-gray-200 dark:border-white/10">{renderInline(line.slice(3))}</h2>);
+            elements.push(<h2 key={key++} className="text-xl font-heading font-semibold tracking-tight mt-10 mb-3 pb-2 border-b border-border">{renderInline(line.slice(3))}</h2>);
             i++; continue;
         }
         if (line.startsWith("### ")) {
@@ -58,7 +58,7 @@ function renderMarkdown(md: string) {
         // Blockquote
         if (line.startsWith("> ")) {
             elements.push(
-                <blockquote key={key++} className="my-4 pl-4 border-l-4 border-purple-400 dark:border-purple-500 text-gray-600 dark:text-gray-400 italic">
+                <blockquote key={key++} className="my-4 pl-4 border-l-4 border-primary text-muted-foreground italic">
                     {renderInline(line.slice(2))}
                 </blockquote>
             );
@@ -75,12 +75,12 @@ function renderMarkdown(md: string) {
                 i++;
             }
             elements.push(
-                <div key={key++} className="my-4 overflow-x-auto rounded-lg border border-gray-200 dark:border-white/10">
+                <div key={key++} className="my-4 overflow-x-auto rounded-lg border border-border">
                     <table className="w-full text-sm">
                         <thead>
-                            <tr className="bg-gray-50 dark:bg-white/[0.03]">
+                            <tr className="bg-muted">
                                 {headers.map((h, hi) => (
-                                    <th key={hi} className="px-4 py-2.5 text-left font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-white/10">
+                                    <th key={hi} className="px-4 py-2.5 text-left font-semibold text-foreground/80 border-b border-border">
                                         {renderInline(h)}
                                     </th>
                                 ))}
@@ -88,9 +88,9 @@ function renderMarkdown(md: string) {
                         </thead>
                         <tbody>
                             {rows.map((row, ri) => (
-                                <tr key={ri} className="border-b last:border-b-0 border-gray-200 dark:border-white/10">
+                                <tr key={ri} className="border-b last:border-b-0 border-border">
                                     {row.map((cell, ci) => (
-                                        <td key={ci} className="px-4 py-2.5 text-gray-600 dark:text-gray-400">
+                                        <td key={ci} className="px-4 py-2.5 text-muted-foreground">
                                             {renderInline(cell)}
                                         </td>
                                     ))}
@@ -111,7 +111,7 @@ function renderMarkdown(md: string) {
                 i++;
             }
             elements.push(
-                <ul key={key++} className="my-3 ml-4 space-y-1.5 list-disc list-outside text-gray-600 dark:text-gray-400 text-[14px] leading-relaxed">
+                <ul key={key++} className="my-3 ml-4 space-y-1.5 list-disc list-outside text-muted-foreground text-[14px] leading-relaxed">
                     {items.map((item, ii) => (
                         <li key={ii}>{renderInline(item)}</li>
                     ))}
@@ -127,7 +127,7 @@ function renderMarkdown(md: string) {
 
         // Paragraph
         elements.push(
-            <p key={key++} className="my-3 text-[14px] leading-relaxed text-gray-600 dark:text-gray-400">
+            <p key={key++} className="my-3 text-[14px] leading-relaxed text-muted-foreground">
                 {renderInline(line)}
             </p>
         );
@@ -149,7 +149,7 @@ function renderInline(text: string): React.ReactNode {
         if (codeMatch) {
             if (codeMatch[1]) parts.push(<span key={idx++}>{processEmphasis(codeMatch[1])}</span>);
             parts.push(
-                <code key={idx++} className="px-1.5 py-0.5 text-[13px] font-mono bg-gray-100 dark:bg-white/10 text-purple-600 dark:text-purple-400 rounded">
+                <code key={idx++} className="px-1.5 py-0.5 text-[13px] font-mono bg-muted text-primary rounded">
                     {codeMatch[2]}
                 </code>
             );
@@ -171,7 +171,7 @@ function processEmphasis(text: string): React.ReactNode {
     return (
         <>
             {parts.map((part, i) =>
-                i % 2 === 1 ? <strong key={i} className="font-semibold text-gray-900 dark:text-white">{part}</strong> : part
+                i % 2 === 1 ? <strong key={i} className="font-semibold text-foreground">{part}</strong> : part
             )}
         </>
     );
@@ -203,20 +203,20 @@ function DocsLanding() {
     return (
         <div>
             <h1 className="text-3xl font-heading font-bold tracking-tight mb-3">Nester Documentation</h1>
-            <p className="text-gray-500 dark:text-gray-400 text-[15px] mb-10 max-w-2xl">
+            <p className="text-muted-foreground text-[15px] mb-10 max-w-2xl">
                 Technical documentation for the Nester protocol — decentralized savings, yield optimization, instant fiat off-ramps, and AI-powered portfolio intelligence on Stellar/Soroban.
             </p>
             <div className="grid gap-6 sm:grid-cols-2">
                 {landingSections.map((section) => (
-                    <div key={section.title} className="p-5 rounded-xl border border-gray-200 dark:border-white/10 hover:border-purple-200 dark:hover:border-purple-500/20 transition-colors">
+                    <div key={section.title} className="p-5 rounded-xl border border-border hover:border-primary/30 transition-colors">
                         <div className="flex items-center gap-2.5 mb-3">
-                            <section.icon className="w-5 h-5 text-purple-500" />
+                            <section.icon className="w-5 h-5 text-primary" />
                             <h2 className="font-heading font-semibold text-[15px]">{section.title}</h2>
                         </div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">{section.desc}</p>
+                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{section.desc}</p>
                         <div className="space-y-1">
                             {section.links.map((link) => (
-                                <Link key={link.slug} href={`/docs/${link.slug}`} className="block text-sm text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 transition-colors">
+                                <Link key={link.slug} href={`/docs/${link.slug}`} className="block text-sm text-primary hover:text-primary/80 transition-colors">
                                     &bull; {link.title}
                                 </Link>
                             ))}
@@ -245,8 +245,8 @@ export default function DocsPage() {
         return (
             <div className="py-20 text-center">
                 <h1 className="text-2xl font-heading font-bold mb-4">Page not found</h1>
-                <p className="text-gray-500 mb-6">The documentation page &quot;{slug}&quot; doesn&apos;t exist yet.</p>
-                <Link href="/docs/introduction" className="text-purple-600 dark:text-purple-400 hover:underline">
+                <p className="text-muted-foreground mb-6">The documentation page &quot;{slug}&quot; doesn&apos;t exist yet.</p>
+                <Link href="/docs/introduction" className="text-primary hover:underline">
                     Go to Introduction
                 </Link>
             </div>
@@ -259,14 +259,14 @@ export default function DocsPage() {
             <div className="docs-content">{renderMarkdown(doc.content)}</div>
 
             {/* Prev / Next */}
-            <div className="mt-16 pt-6 border-t border-gray-200 dark:border-white/10 flex items-center justify-between gap-4">
+            <div className="mt-16 pt-6 border-t border-border flex items-center justify-between gap-4">
                 {prev ? (
                     <Link
                         href={`/docs/${prev.slug}`}
-                        className="group flex flex-col items-start px-4 py-3 rounded-lg border border-gray-200 dark:border-white/10 hover:border-purple-300 dark:hover:border-purple-500/30 transition-colors flex-1"
+                        className="group flex flex-col items-start px-4 py-3 rounded-lg border border-border hover:border-primary/30 transition-colors flex-1"
                     >
-                        <span className="text-[11px] text-gray-400 mb-1">Previous</span>
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                        <span className="text-[11px] text-muted-foreground mb-1">Previous</span>
+                        <span className="text-sm font-medium text-foreground/80 group-hover:text-primary transition-colors">
                             &laquo; {prev.title}
                         </span>
                     </Link>
@@ -274,10 +274,10 @@ export default function DocsPage() {
                 {next ? (
                     <Link
                         href={`/docs/${next.slug}`}
-                        className="group flex flex-col items-end px-4 py-3 rounded-lg border border-gray-200 dark:border-white/10 hover:border-purple-300 dark:hover:border-purple-500/30 transition-colors flex-1"
+                        className="group flex flex-col items-end px-4 py-3 rounded-lg border border-border hover:border-primary/30 transition-colors flex-1"
                     >
-                        <span className="text-[11px] text-gray-400 mb-1">Next</span>
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                        <span className="text-[11px] text-muted-foreground mb-1">Next</span>
+                        <span className="text-sm font-medium text-foreground/80 group-hover:text-primary transition-colors">
                             {next.title} &raquo;
                         </span>
                     </Link>

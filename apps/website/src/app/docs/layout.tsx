@@ -37,20 +37,20 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
         <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]" onClick={onClose}>
             <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
             <div
-                className="relative w-full max-w-lg mx-4 bg-white dark:bg-[#1a1a2e] rounded-xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden"
+                className="relative w-full max-w-lg mx-4 bg-background rounded-xl shadow-2xl border border-border overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-white/10">
-                    <Search className="w-5 h-5 text-gray-400" />
+                <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
+                    <Search className="w-5 h-5 text-muted-foreground" />
                     <input
                         ref={inputRef}
                         type="text"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Search documentation..."
-                        className="flex-1 bg-transparent text-sm text-gray-900 dark:text-white placeholder:text-gray-400 outline-none"
+                        className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none font-sans"
                     />
-                    <kbd className="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-mono bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 rounded">
+                    <kbd className="hidden sm:inline-flex px-2 py-0.5 text-[10px] font-mono bg-muted text-muted-foreground rounded">
                         ESC
                     </kbd>
                 </div>
@@ -61,7 +61,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                                 key={r.slug}
                                 href={`/docs/${r.slug}`}
                                 onClick={onClose}
-                                className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+                                className="block px-4 py-2.5 text-sm text-foreground/80 hover:bg-muted transition-colors"
                             >
                                 {r.title}
                             </Link>
@@ -69,7 +69,7 @@ function SearchModal({ open, onClose }: { open: boolean; onClose: () => void }) 
                     </div>
                 )}
                 {query.length >= 2 && results.length === 0 && (
-                    <div className="px-4 py-8 text-center text-sm text-gray-400">
+                    <div className="px-4 py-8 text-center text-sm text-muted-foreground">
                         No results found for &quot;{query}&quot;
                     </div>
                 )}
@@ -102,7 +102,7 @@ function Sidebar({ currentSlug, onNavigate }: { currentSlug: string; onNavigate?
                 <div key={section.slug} className="mb-2">
                     <button
                         onClick={() => toggle(section.slug)}
-                        className="flex items-center justify-between w-full px-3 py-2 text-[11px] font-bold tracking-[0.12em] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors uppercase"
+                        className="flex items-center justify-between w-full px-3 py-2 text-[11px] font-heading font-bold tracking-[0.12em] text-muted-foreground hover:text-foreground transition-colors uppercase"
                     >
                         {section.title}
                         {expanded[section.slug] ? (
@@ -112,7 +112,7 @@ function Sidebar({ currentSlug, onNavigate }: { currentSlug: string; onNavigate?
                         )}
                     </button>
                     {expanded[section.slug] && section.children && (
-                        <div className="ml-2 border-l border-gray-200 dark:border-white/10 pl-2 space-y-0.5">
+                        <div className="ml-2 border-l border-border pl-2 space-y-0.5">
                             {section.children.map((child) => (
                                 <Link
                                     key={child.slug}
@@ -121,8 +121,8 @@ function Sidebar({ currentSlug, onNavigate }: { currentSlug: string; onNavigate?
                                     className={cn(
                                         "block px-3 py-1.5 rounded-md transition-colors",
                                         currentSlug === child.slug
-                                            ? "bg-purple-50 dark:bg-purple-500/10 text-purple-700 dark:text-purple-400 font-medium"
-                                            : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5"
+                                            ? "bg-primary/10 text-primary font-medium"
+                                            : "text-muted-foreground hover:text-foreground hover:bg-muted"
                                     )}
                                 >
                                     {child.title}
@@ -182,22 +182,22 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
     useEffect(() => setMobileMenuOpen(false), [pathname]);
 
     return (
-        <div className={cn("min-h-screen bg-white dark:bg-[#0f0f23] text-gray-900 dark:text-gray-100 transition-colors")}>
+        <div className={cn("min-h-screen bg-background text-foreground transition-colors font-sans")}>
             {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 h-14 bg-white/80 dark:bg-[#0f0f23]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/10">
+            <header className="fixed top-0 left-0 right-0 z-50 h-14 bg-background/80 backdrop-blur-md border-b border-border">
                 <div className="h-full max-w-[1600px] mx-auto px-4 flex items-center justify-between">
                     {/* Left: Logo + title */}
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="lg:hidden p-1.5 -ml-1.5 text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                            className="lg:hidden p-1.5 -ml-1.5 text-muted-foreground hover:text-foreground"
                         >
                             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                         </button>
                         <Link href="/docs" className="flex items-center gap-2.5">
                             <Image src="/logo.png" alt="Nester" width={28} height={28} className="rounded-lg" />
                             <span className="font-heading font-bold text-[15px] tracking-tight">
-                                Nester <span className="text-gray-400 dark:text-gray-500 font-normal">Documentation</span>
+                                Nester <span className="text-muted-foreground font-normal">Documentation</span>
                             </span>
                         </Link>
                     </div>
@@ -206,17 +206,17 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => setSearchOpen(true)}
-                            className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm text-gray-400 bg-gray-100 dark:bg-white/5 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
+                            className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-sm text-muted-foreground bg-muted rounded-lg hover:bg-muted/80 transition-colors"
                         >
                             <Search className="w-4 h-4" />
                             <span>Search</span>
-                            <kbd className="ml-4 px-1.5 py-0.5 text-[10px] font-mono bg-white dark:bg-white/10 rounded border border-gray-200 dark:border-white/10">
+                            <kbd className="ml-4 px-1.5 py-0.5 text-[10px] font-mono bg-background rounded border border-border">
                                 Ctrl K
                             </kbd>
                         </button>
                         <button
                             onClick={() => setSearchOpen(true)}
-                            className="sm:hidden p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white"
+                            className="sm:hidden p-2 text-muted-foreground hover:text-foreground"
                         >
                             <Search className="w-5 h-5" />
                         </button>
@@ -225,7 +225,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
                             href="https://github.com/Suncrest-Labs"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+                            className="p-2 text-muted-foreground hover:text-foreground transition-colors"
                             title="GitHub"
                         >
                             <Github className="w-5 h-5" />
@@ -233,7 +233,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
 
                         <button
                             onClick={toggleDark}
-                            className="p-2 text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+                            className="p-2 text-muted-foreground hover:text-foreground transition-colors"
                             title={dark ? "Light mode" : "Dark mode"}
                         >
                             {dark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -246,7 +246,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
             {mobileMenuOpen && (
                 <div className="fixed inset-0 z-40 lg:hidden">
                     <div className="absolute inset-0 bg-black/30" onClick={() => setMobileMenuOpen(false)} />
-                    <div className="absolute left-0 top-14 bottom-0 w-72 bg-white dark:bg-[#0f0f23] border-r border-gray-200 dark:border-white/10 overflow-y-auto">
+                    <div className="absolute left-0 top-14 bottom-0 w-72 bg-background border-r border-border overflow-y-auto">
                         <Sidebar currentSlug={slug} onNavigate={() => setMobileMenuOpen(false)} />
                     </div>
                 </div>
@@ -255,7 +255,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
             {/* Main layout */}
             <div className="flex max-w-[1600px] mx-auto pt-14">
                 {/* Desktop sidebar */}
-                <aside className="hidden lg:block w-64 flex-shrink-0 h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto border-r border-gray-200 dark:border-white/10">
+                <aside className="hidden lg:block w-64 flex-shrink-0 h-[calc(100vh-3.5rem)] sticky top-14 overflow-y-auto border-r border-border">
                     <Sidebar currentSlug={slug} />
                 </aside>
 
