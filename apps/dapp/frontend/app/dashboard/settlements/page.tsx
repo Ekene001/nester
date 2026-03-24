@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useWallet } from "@/components/wallet-provider";
+import { useNotifications } from "@/components/notifications-provider";
 import { Navbar } from "@/components/navbar";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
@@ -117,6 +118,7 @@ function buildQuotes(
 
 export default function SettlementsPage() {
     const { isConnected } = useWallet();
+    const { addNotification } = useNotifications();
     const router = useRouter();
 
     const [sendAmount, setSendAmount] = useState("");
@@ -219,6 +221,25 @@ export default function SettlementsPage() {
         : numericAmount > 0
             ? numericAmount * receiveCurrency.rate * 0.995
             : 0;
+
+    const handleWithdraw = () => {
+        if (!allFieldsFilled || quotePhase !== "done" || !selectedQuote) {
+            return;
+        }
+
+        addNotification(
+            {
+                type: "withdrawal_processed",
+                title: "Withdrawal Submitted",
+                message: `Withdrew ${numericAmount.toLocaleString("en-US", {
+                    maximumFractionDigits: 2,
+                })} ${sendAsset.symbol} to ${selectedBank?.name} ending in ${accountNumber.slice(-4)}.`,
+                actionUrl: `https://stellar.expert/explorer/testnet/tx/mock-settlement-${selectedQuote.node.id}`,
+                actionLabel: "View Transaction",
+            },
+            { showToast: true }
+        );
+    };
 
     return (
         <div className="min-h-screen bg-background">
@@ -423,6 +444,7 @@ export default function SettlementsPage() {
                     <div className="p-5 pt-0">
                         <button
                             disabled={!allFieldsFilled || quotePhase !== "done"}
+                            onClick={handleWithdraw}
                             className="w-full rounded-xl bg-foreground text-background py-4 text-sm font-medium transition-all hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed"
                         >
                             {!numericAmount ? "Enter an amount" :

@@ -1,6 +1,7 @@
 "use client";
 
 import { useWallet } from "@/components/wallet-provider";
+import { useNotifications } from "@/components/notifications-provider";
 import { Navbar } from "@/components/navbar";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -60,6 +61,7 @@ const vaultTypes = [
 
 export default function VaultsPage() {
     const { isConnected } = useWallet();
+    const { addNotification } = useNotifications();
     const router = useRouter();
 
     useEffect(() => {
@@ -68,13 +70,26 @@ export default function VaultsPage() {
         }
     }, [isConnected, router]);
 
+    const handleMockDeposit = (vaultName: string) => {
+        addNotification(
+            {
+                type: "deposit_confirmed",
+                title: "Deposit Confirmed",
+                message: `Deposited 500 USDC into ${vaultName} Vault`,
+                actionUrl: `https://stellar.expert/explorer/testnet/tx/mock-deposit-${vaultName.toLowerCase()}`,
+                actionLabel: "View Transaction",
+            },
+            { showToast: true }
+        );
+    };
+
     if (!isConnected) return null;
 
     return (
         <div className="min-h-screen bg-background">
             <Navbar />
 
-            <main className="mx-auto max-w-[1536px] px-4 md:px-8 lg:px-12 xl:px-16 pt-28 pb-16">
+            <main className="mx-auto max-w-384 px-4 md:px-8 lg:px-12 xl:px-16 pt-28 pb-16">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -142,7 +157,12 @@ export default function VaultsPage() {
                                         }`} />
                                         <span className="text-xs text-muted-foreground font-medium">{vault.risk} Risk</span>
                                     </div>
-                                    <button className="flex items-center gap-1.5 text-sm font-medium text-foreground hover:gap-2 transition-all">
+                                    <button
+                                        onClick={() =>
+                                            handleMockDeposit(vault.name)
+                                        }
+                                        className="flex items-center gap-1.5 text-sm font-medium text-foreground hover:gap-2 transition-all"
+                                    >
                                         Deposit <ArrowUpRight className="h-4 w-4" />
                                     </button>
                                 </div>
